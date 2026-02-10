@@ -1,0 +1,33 @@
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #1a1a1a;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.nav-btn {
+  flex: 0.075;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #ccc;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background-color: #333;
+  color: white;
+}
+
+.nav-btn.active {
+  background-color: #ebc429;
+  color: #1a1a1a;
+  font-weight: bold;
+}
