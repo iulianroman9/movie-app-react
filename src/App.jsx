@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { getWatchlist } from "./utils/storage";
 import MovieList from "./components/MovieList";
+import Navbar from "./components/Navbar";
 import "./App.css";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [apiError, setApiError] = useState(null);
+  const [view, setView] = useState("home");
   let [watchlist, setWatchlist] = useState(() => getWatchlist());
 
   useEffect(() => {
@@ -50,17 +52,28 @@ function App() {
       return <div className="error-message">{apiError}</div>;
     }
 
-    return (
-      <MovieList
-        movies={movies}
-        watchlist={watchlist}
-        toggleWatchlist={toggleWatchlist}
-      />
-    );
+    if (view === "home") {
+      return (
+        <MovieList
+          movies={movies}
+          watchlist={watchlist}
+          toggleWatchlist={toggleWatchlist}
+        />
+      );
+    } else {
+      return (
+        <MovieList
+          movies={watchlist}
+          watchlist={watchlist}
+          toggleWatchlist={toggleWatchlist}
+        />
+      );
+    }
   };
 
   return (
     <div className="app">
+      <Navbar view={view} setView={setView} />
       <main>{render()}</main>
     </div>
   );
