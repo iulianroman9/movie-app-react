@@ -6,14 +6,15 @@ function MovieList({ movies, watchlist, toggleWatchlist }) {
     return <div className="movie-list-empty">No movies to list.</div>;
 
   const movieList = movies.map((movie) => {
-    const isWatchlisted = watchlist.includes(movie.id);
+    const mappedWatchList = watchlist.map((item) => item.id);
+    const isWatchlisted = mappedWatchList.includes(movie.id);
 
     return (
       <MovieCard
         key={movie.id}
         movie={movie}
         isWatchlisted={isWatchlisted}
-        toggleWatchlist={toggleWatchlist}
+        toggleWatchlist={() => toggleWatchlist(movie)}
       />
     );
   });

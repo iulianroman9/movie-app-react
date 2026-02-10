@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getWatchlist } from "./utils/storage";
 import MovieList from "./components/MovieList";
 import "./App.css";
 
@@ -6,6 +7,23 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [apiError, setApiError] = useState(null);
+  let [watchlist, setWatchlist] = useState(() => getWatchlist());
+
+  useEffect(() => {
+    localStorage.setItem("watchlist", JSON.stringify(watchlist));
+  }, [watchlist]);
+
+  const toggleWatchlist = (movie) => {
+    setWatchlist((watchlist) => {
+      const mappedList = watchlist.map((elem) => elem.id);
+
+      if (mappedList.includes(movie.id)) {
+        return watchlist.filter((elem) => elem.id !== movie.id);
+      } else {
+        return [...watchlist, movie];
+      }
+    });
+  };
 
   useEffect(() => {
     fetch("movies.json")
@@ -33,7 +51,11 @@ function App() {
     }
 
     return (
-      <MovieList movies={movies} watchlist={[1]} toggleWatchlist={() => {}} />
+      <MovieList
+        movies={movies}
+        watchlist={watchlist}
+        toggleWatchlist={toggleWatchlist}
+      />
     );
   };
 

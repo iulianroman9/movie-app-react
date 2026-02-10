@@ -18,7 +18,7 @@ function MovieCard({ movie, isWatchlisted, toggleWatchlist }) {
           <p>{`Rating: ${movie.rating}/10`}</p>
         </div>
       </div>
-      <button className={classList} onClick={() => toggleWatchlist(movie.id)}>
+      <button className={classList} onClick={() => toggleWatchlist(movie)}>
         {buttonText}
       </button>
     </div>
