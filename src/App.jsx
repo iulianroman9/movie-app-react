@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getWatchlist } from "./utils/storage";
 import MovieList from "./components/MovieList";
 import Navbar from "./components/Navbar";
+import Search, { filterByQuery } from "./components/Search";
 import "./App.css";
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [apiError, setApiError] = useState(null);
   const [view, setView] = useState("home");
-  let [watchlist, setWatchlist] = useState(() => getWatchlist());
+  const [searchQuery, setSearchQuery] = useState("");
+  let [watchlist, setWatchlist] = useState(getWatchlist());
 
   useEffect(() => {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
@@ -55,7 +57,7 @@ function App() {
     if (view === "home") {
       return (
         <MovieList
-          movies={movies}
+          movies={filterByQuery(searchQuery, movies)}
           watchlist={watchlist}
           toggleWatchlist={toggleWatchlist}
         />
@@ -63,7 +65,7 @@ function App() {
     } else {
       return (
         <MovieList
-          movies={watchlist}
+          movies={filterByQuery(searchQuery, watchlist)}
           watchlist={watchlist}
           toggleWatchlist={toggleWatchlist}
         />
@@ -74,6 +76,7 @@ function App() {
   return (
     <div className="app">
       <Navbar view={view} setView={setView} />
+      <Search query={searchQuery} setSearchQuery={setSearchQuery} />
       <main>{render()}</main>
     </div>
   );
