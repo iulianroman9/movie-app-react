@@ -3,7 +3,7 @@ import "./MovieList.css";
 
 function MovieList({ movies, watchlist, toggleWatchlist }) {
   if (movies.length === 0 || !movies)
-    return <div className="movie-list-empty">No movies available.</div>;
+    return <div className="movie-list-empty">No movies to list.</div>;
 
   const movieList = movies.map((movie) => {
     const isWatchlisted = watchlist.includes(movie.id);

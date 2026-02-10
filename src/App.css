@@ -4,3 +4,10 @@
   color: #a8a8a8;
   font-size: 1.5rem;
 }
+
+.error-message {
+  text-align: center;
+  margin-top: 4rem;
+  color: #ff0000;
+  font-size: 1.5rem;
+}
