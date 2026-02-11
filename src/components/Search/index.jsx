@@ -7,6 +7,8 @@ function Search({
   setSortTitle,
   sortRating,
   setSortRating,
+  selectedGenre,
+  setSelectedGenre,
 }) {
   const getSortTitleText = () => {
     if (sortTitle === "asc") return "Titles: a-z";
@@ -42,6 +44,8 @@ function Search({
     setSortTitle("no-sort");
   };
 
+  const genres = ["drama", "action", "fantasy", "horror"];
+
   return (
     <div className="search-container">
       <form className="search-form" onSubmit={(e) => e.preventDefault()}>
@@ -55,9 +59,23 @@ function Search({
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </form>
+      <select
+        className="genre-select"
+        value={selectedGenre}
+        onChange={(e) => setSelectedGenre(e.target.value)}
+      >
+        <option value="all">all</option>
+        {genres.map((genre) => (
+          <option key={genre} value={genre}>
+            {genre}
+          </option>
+        ))}
+      </select>
+
       <button className="sorting-btn" onClick={handleSortTitle}>
         {getSortTitleText()}
       </button>
+
       <button className="sorting-btn" onClick={handleSortRating}>
         {getSortRatingText()}
       </button>
@@ -65,8 +83,22 @@ function Search({
   );
 }
 
-export function filterByQuery(searchQuery, movieList, sortTitle, sortRating) {
-  const filteredMovieList = movieList.filter((movie) =>
+export function filterByQuery(
+  searchQuery,
+  movieList,
+  sortTitle,
+  sortRating,
+  selectedGenre,
+) {
+  let filteredMovieList = movieList;
+
+  if (selectedGenre && selectedGenre !== "all") {
+    filteredMovieList = filteredMovieList.filter(
+      (movie) => movie.genre === selectedGenre,
+    );
+  }
+
+  filteredMovieList = filteredMovieList.filter((movie) =>
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
