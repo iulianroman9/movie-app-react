@@ -11,6 +11,7 @@ function App() {
   const [apiError, setApiError] = useState(null);
   const [view, setView] = useState("home");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("no-sort");
   let [watchlist, setWatchlist] = useState(getWatchlist());
 
   useEffect(() => {
@@ -45,7 +46,7 @@ function App() {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const render = () => {
+  const renderMovieList = () => {
     if (isLoading) {
       return <div className="fetching-data">Fetching movies...</div>;
     }
@@ -54,30 +55,28 @@ function App() {
       return <div className="error-message">{apiError}</div>;
     }
 
-    if (view === "home") {
-      return (
-        <MovieList
-          movies={filterByQuery(searchQuery, movies)}
-          watchlist={watchlist}
-          toggleWatchlist={toggleWatchlist}
-        />
-      );
-    } else {
-      return (
-        <MovieList
-          movies={filterByQuery(searchQuery, watchlist)}
-          watchlist={watchlist}
-          toggleWatchlist={toggleWatchlist}
-        />
-      );
-    }
+    let filteredMovies = view === "home" ? movies : watchlist;
+    filteredMovies = filterByQuery(searchQuery, filteredMovies, sortOrder);
+
+    return (
+      <MovieList
+        movies={filteredMovies}
+        watchlist={watchlist}
+        toggleWatchlist={toggleWatchlist}
+      />
+    );
   };
 
   return (
     <div className="app">
       <Navbar view={view} setView={setView} />
-      <Search query={searchQuery} setSearchQuery={setSearchQuery} />
-      <main>{render()}</main>
+      <Search
+        query={searchQuery}
+        setSearchQuery={setSearchQuery}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+      />
+      <main>{renderMovieList()}</main>
     </div>
   );
 }
