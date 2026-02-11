@@ -11,7 +11,8 @@ function App() {
   const [apiError, setApiError] = useState(null);
   const [view, setView] = useState("home");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState("no-sort");
+  const [sortTitle, setSortTitle] = useState("no-sort");
+  const [sortRating, setSortRating] = useState("no-sort");
   let [watchlist, setWatchlist] = useState(getWatchlist());
 
   useEffect(() => {
@@ -56,7 +57,12 @@ function App() {
     }
 
     let filteredMovies = view === "home" ? movies : watchlist;
-    filteredMovies = filterByQuery(searchQuery, filteredMovies, sortOrder);
+    filteredMovies = filterByQuery(
+      searchQuery,
+      filteredMovies,
+      sortTitle,
+      sortRating,
+    );
 
     return (
       <MovieList
@@ -71,10 +77,12 @@ function App() {
     <div className="app">
       <Navbar view={view} setView={setView} />
       <Search
-        query={searchQuery}
+        searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
+        sortTitle={sortTitle}
+        setSortTitle={setSortTitle}
+        sortRating={sortRating}
+        setSortRating={setSortRating}
       />
       <main>{renderMovieList()}</main>
     </div>
