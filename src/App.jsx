@@ -13,7 +13,8 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortTitle, setSortTitle] = useState("no-sort");
   const [sortRating, setSortRating] = useState("no-sort");
-  let [watchlist, setWatchlist] = useState(getWatchlist());
+  const [selectedGenre, setSelectedGenre] = useState("all");
+  const [watchlist, setWatchlist] = useState(getWatchlist());
 
   useEffect(() => {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
@@ -62,6 +63,7 @@ function App() {
       filteredMovies,
       sortTitle,
       sortRating,
+      selectedGenre,
     );
 
     return (
@@ -83,6 +85,8 @@ function App() {
         setSortTitle={setSortTitle}
         sortRating={sortRating}
         setSortRating={setSortRating}
+        selectedGenre={selectedGenre}
+        setSelectedGenre={setSelectedGenre}
       />
       <main>{renderMovieList()}</main>
     </div>
