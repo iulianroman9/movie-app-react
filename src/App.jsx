@@ -1,38 +1,22 @@
 import { useState, useEffect } from "react";
-import { getWatchlist } from "./utils/storage";
+import { useWatchlist } from "./utils/storage";
 import MovieList from "./components/MovieList";
 import Navbar from "./components/Navbar";
 import Search, { filterByQuery } from "./components/Search";
 import "./App.css";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [movies, setMovies] = useState([]);
   const [apiError, setApiError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [view, setView] = useState("home");
+  const [movies, setMovies] = useState([]);
+  const [watchlist, isWatchlisted, toggleWatchlist] = useWatchlist();
   const [filter, setFilter] = useState({
     query: "",
     title: "no-sort",
     rating: "no-sort",
     genre: "all",
   });
-  const [watchlist, setWatchlist] = useState(getWatchlist());
-
-  useEffect(() => {
-    localStorage.setItem("watchlist", JSON.stringify(watchlist));
-  }, [watchlist]);
-
-  const toggleWatchlist = (movie) => {
-    setWatchlist((watchlist) => {
-      const mappedList = watchlist.map((elem) => elem.id);
-
-      if (mappedList.includes(movie.id)) {
-        return watchlist.filter((elem) => elem.id !== movie.id);
-      } else {
-        return [...watchlist, movie];
-      }
-    });
-  };
 
   useEffect(() => {
     fetch("movies.json")
@@ -51,13 +35,9 @@ function App() {
   }, []);
 
   const renderMovieList = () => {
-    if (isLoading) {
+    if (isLoading)
       return <div className="fetching-data">Fetching movies...</div>;
-    }
-
-    if (apiError) {
-      return <div className="error-message">{apiError}</div>;
-    }
+    if (apiError) return <div className="error-message">{apiError}</div>;
 
     const whichMovies = view === "home" ? movies : watchlist;
     const filteredMovies = filterByQuery(whichMovies, filter);
@@ -65,7 +45,7 @@ function App() {
     return (
       <MovieList
         movies={filteredMovies}
-        watchlist={watchlist}
+        isWatchlisted={isWatchlisted}
         toggleWatchlist={toggleWatchlist}
       />
     );
