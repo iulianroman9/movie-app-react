@@ -1,38 +1,6 @@
 import "./Search.css";
 
 function Search({ filter, setFilter }) {
-  const getSortTitleText = () => {
-    if (filter.title === "asc") return "Titles: a-z";
-    if (filter.title === "desc") return "Titles: z-a";
-    return "Sort titles";
-  };
-
-  const getSortRatingText = () => {
-    if (filter.rating === "asc") return "Rating: low";
-    if (filter.rating === "desc") return "Rating: high";
-    return "Sort ratings";
-  };
-
-  const getNextSortState = (currentState) => {
-    if (currentState === "no-sort") {
-      return "asc";
-    } else if (currentState === "asc") {
-      return "desc";
-    } else {
-      return "no-sort";
-    }
-  };
-
-  const handleSortTitle = () => {
-    const nextState = getNextSortState(filter.title);
-    setFilter({ ...filter, title: nextState, rating: "no-sort" });
-  };
-
-  const handleSortRating = () => {
-    const nextState = getNextSortState(filter.rating);
-    setFilter({ ...filter, title: "no-sort", rating: nextState });
-  };
-
   const genres = ["drama", "action", "fantasy", "horror"];
 
   return (
@@ -61,16 +29,54 @@ function Search({ filter, setFilter }) {
         ))}
       </select>
 
-      <button className="sorting-btn" onClick={handleSortTitle}>
-        {getSortTitleText()}
+      <button
+        className="sorting-btn"
+        onClick={() => handleSortTitle(filter, setFilter)}
+      >
+        {getSortTitleText(filter)}
       </button>
 
-      <button className="sorting-btn" onClick={handleSortRating}>
-        {getSortRatingText()}
+      <button
+        className="sorting-btn"
+        onClick={() => handleSortRating(filter, setFilter)}
+      >
+        {getSortRatingText(filter)}
       </button>
     </div>
   );
 }
+
+const handleSortTitle = (filter, setFilter) => {
+  const nextState = getNextSortState(filter.title);
+  setFilter({ ...filter, title: nextState, rating: "no-sort" });
+};
+
+const handleSortRating = (filter, setFilter) => {
+  const nextState = getNextSortState(filter.rating);
+  setFilter({ ...filter, title: "no-sort", rating: nextState });
+};
+
+const getSortTitleText = (filter) => {
+  if (filter.title === "asc") return "Titles: a-z";
+  if (filter.title === "desc") return "Titles: z-a";
+  return "Sort titles";
+};
+
+const getSortRatingText = (filter) => {
+  if (filter.rating === "asc") return "Rating: low";
+  if (filter.rating === "desc") return "Rating: high";
+  return "Sort ratings";
+};
+
+const getNextSortState = (currentState) => {
+  if (currentState === "no-sort") {
+    return "asc";
+  } else if (currentState === "asc") {
+    return "desc";
+  } else {
+    return "no-sort";
+  }
+};
 
 export function filterByQuery(movieList, filter) {
   let filteredMovieList = movieList;
