@@ -1,6 +1,6 @@
 import "./Search.css";
 
-function Search({ filter, setFilter }) {
+function Search({ filters, setFilters }) {
   const genres = ["drama", "action", "fantasy", "horror"];
 
   return (
@@ -12,14 +12,14 @@ function Search({ filter, setFilter }) {
           className="search-input"
           placeholder="Search for a movie..."
           autoComplete="off"
-          value={filter.query}
-          onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+          value={filters.query}
+          onChange={(e) => setFilters({ ...filters, query: e.target.value })}
         />
       </form>
       <select
         className="genre-select"
-        value={filter.genre}
-        onChange={(e) => setFilter({ ...filter, genre: e.target.value })}
+        value={filters.genre}
+        onChange={(e) => setFilters({ ...filters, genre: e.target.value })}
       >
         <option value="all">all</option>
         {genres.map((genre) => (
@@ -31,83 +31,62 @@ function Search({ filter, setFilter }) {
 
       <button
         className="sorting-btn"
-        onClick={() => handleSortTitle(filter, setFilter)}
+        onClick={() => handleSortTitle(filters, setFilters)}
       >
-        {getSortTitleText(filter)}
+        {getSortTitleText(filters)}
       </button>
 
       <button
         className="sorting-btn"
-        onClick={() => handleSortRating(filter, setFilter)}
+        onClick={() => handleSortRating(filters, setFilters)}
       >
-        {getSortRatingText(filter)}
+        {getSortRatingText(filters)}
       </button>
     </div>
   );
 }
 
-const handleSortTitle = (filter, setFilter) => {
-  const nextState = getNextSortState(filter.title);
-  setFilter({ ...filter, title: nextState, rating: "no-sort" });
+const handleSortTitle = (filters, setFilters) => {
+  const nextState = getNextSortState(filters.title);
+  setFilters({ ...filters, title: nextState, rating: "no-sort" });
 };
 
-const handleSortRating = (filter, setFilter) => {
-  const nextState = getNextSortState(filter.rating);
-  setFilter({ ...filter, title: "no-sort", rating: nextState });
+const handleSortRating = (filters, setFilters) => {
+  const nextState = getNextSortState(filters.rating);
+  setFilters({ ...filters, title: "no-sort", rating: nextState });
 };
 
-const getSortTitleText = (filter) => {
-  if (filter.title === "asc") return "Titles: a-z";
-  if (filter.title === "desc") return "Titles: z-a";
-  return "Sort titles";
+const getSortTitleText = (filters) => {
+  switch (filters.title) {
+    case "asc":
+      return "Titles: a-z";
+    case "desc":
+      return "Titles: z-a";
+    default:
+      return "Sort titles";
+  }
 };
 
-const getSortRatingText = (filter) => {
-  if (filter.rating === "asc") return "Rating: low";
-  if (filter.rating === "desc") return "Rating: high";
-  return "Sort ratings";
+const getSortRatingText = (filters) => {
+  switch (filters.rating) {
+    case "asc":
+      return "Rating: low";
+    case "desc":
+      return "Rating: high";
+    default:
+      return "Sort ratings";
+  }
 };
 
 const getNextSortState = (currentState) => {
-  if (currentState === "no-sort") {
-    return "asc";
-  } else if (currentState === "asc") {
-    return "desc";
-  } else {
-    return "no-sort";
+  switch (currentState) {
+    case "no-sort":
+      return "asc";
+    case "asc":
+      return "desc";
+    default:
+      return "no-sort";
   }
 };
-
-export function filterByQuery(movieList, filter) {
-  let filteredMovieList = movieList;
-
-  if (filter.genre !== "all") {
-    filteredMovieList = filteredMovieList.filter(
-      (movie) => movie.genre === filter.genre,
-    );
-  }
-
-  filteredMovieList = filteredMovieList.filter((movie) =>
-    movie.title.toLowerCase().includes(filter.query.toLowerCase()),
-  );
-
-  if (filter.title === "asc")
-    return filteredMovieList.toSorted((a, b) =>
-      a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
-    );
-  else if (filter.title === "desc")
-    return filteredMovieList.toSorted((a, b) =>
-      b.title.toLowerCase().localeCompare(a.title.toLowerCase()),
-    );
-  else if (filter.rating === "asc")
-    return filteredMovieList.toSorted(
-      (a, b) => parseFloat(a.rating) - parseFloat(b.rating),
-    );
-  else if (filter.rating === "desc")
-    return filteredMovieList.toSorted(
-      (a, b) => parseFloat(b.rating) - parseFloat(a.rating),
-    );
-  return filteredMovieList;
-}
 
 export default Search;
