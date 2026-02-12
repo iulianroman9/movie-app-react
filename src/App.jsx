@@ -10,10 +10,12 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [apiError, setApiError] = useState(null);
   const [view, setView] = useState("home");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortTitle, setSortTitle] = useState("no-sort");
-  const [sortRating, setSortRating] = useState("no-sort");
-  const [selectedGenre, setSelectedGenre] = useState("all");
+  const [filter, setFilter] = useState({
+    query: "",
+    title: "no-sort",
+    rating: "no-sort",
+    genre: "all",
+  });
   const [watchlist, setWatchlist] = useState(getWatchlist());
 
   useEffect(() => {
@@ -57,14 +59,8 @@ function App() {
       return <div className="error-message">{apiError}</div>;
     }
 
-    let filteredMovies = view === "home" ? movies : watchlist;
-    filteredMovies = filterByQuery(
-      searchQuery,
-      filteredMovies,
-      sortTitle,
-      sortRating,
-      selectedGenre,
-    );
+    const whichMovies = view === "home" ? movies : watchlist;
+    const filteredMovies = filterByQuery(whichMovies, filter);
 
     return (
       <MovieList
@@ -78,16 +74,7 @@ function App() {
   return (
     <div className="app">
       <Navbar view={view} setView={setView} />
-      <Search
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        sortTitle={sortTitle}
-        setSortTitle={setSortTitle}
-        sortRating={sortRating}
-        setSortRating={setSortRating}
-        selectedGenre={selectedGenre}
-        setSelectedGenre={setSelectedGenre}
-      />
+      <Search filter={filter} setFilter={setFilter} />
       <main>{renderMovieList()}</main>
     </div>
   );
