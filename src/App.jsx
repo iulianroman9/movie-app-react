@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useWatchlist } from "./utils/storage";
 import MovieList from "./components/MovieList";
 import Navbar from "./components/Navbar";
-import Search, { filterByQuery } from "./components/Search";
+import Search from "./components/Search";
 import "./App.css";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
   const [view, setView] = useState("home");
   const [movies, setMovies] = useState([]);
   const [watchlist, isWatchlisted, toggleWatchlist] = useWatchlist();
-  const [filter, setFilter] = useState({
+  const [filters, setFilters] = useState({
     query: "",
     title: "no-sort",
     rating: "no-sort",
@@ -34,28 +34,20 @@ function App() {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const renderMovieList = () => {
-    if (isLoading)
-      return <div className="fetching-data">Fetching movies...</div>;
-    if (apiError) return <div className="error-message">{apiError}</div>;
-
-    const whichMovies = view === "home" ? movies : watchlist;
-    const filteredMovies = filterByQuery(whichMovies, filter);
-
-    return (
-      <MovieList
-        movies={filteredMovies}
-        isWatchlisted={isWatchlisted}
-        toggleWatchlist={toggleWatchlist}
-      />
-    );
-  };
-
   return (
     <div className="app">
       <Navbar view={view} setView={setView} />
-      <Search filter={filter} setFilter={setFilter} />
-      <main>{renderMovieList()}</main>
+      <Search filters={filters} setFilters={setFilters} />
+      <main>
+        <MovieList
+          movies={view === "home" ? movies : watchlist}
+          isLoading={isLoading}
+          apiError={apiError}
+          filters={filters}
+          isWatchlisted={isWatchlisted}
+          toggleWatchlist={toggleWatchlist}
+        />
+      </main>
     </div>
   );
 }
