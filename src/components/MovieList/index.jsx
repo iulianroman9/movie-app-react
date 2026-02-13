@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useWatchlist } from "../../utils/storage";
 import MovieCard from "../MovieCard";
 import "./MovieList.css";
@@ -25,15 +25,18 @@ function MovieList({ view, filters }) {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const listToRender = view === "home" ? movies : watchlist;
+
+  const filteredMovieList = useMemo(() => {
+    if (listToRender.length === 0 || !listToRender) return [];
+    return filterByQuery(listToRender, filters);
+  }, [listToRender, filters]);
+
   if (isLoading) return <div className="fetching-data">Fetching movies...</div>;
   if (apiError) return <div className="error-message">{apiError}</div>;
 
-  const listToRender = view === "home" ? movies : watchlist;
-
-  if (listToRender.length === 0 || !listToRender)
+  if (filteredMovieList.length === 0)
     return <div className="movie-list-empty">No movies to list.</div>;
-
-  const filteredMovieList = filterByQuery(listToRender, filters);
 
   const movieList = filteredMovieList.map((movie) => {
     const isInWatchlist = isWatchlisted(movie.id);
@@ -52,6 +55,7 @@ function MovieList({ view, filters }) {
 }
 
 function filterByQuery(movieList, filters) {
+  console.log(movieList);
   let filteredMovieList = movieList;
 
   if (filters.genre !== "all") {
