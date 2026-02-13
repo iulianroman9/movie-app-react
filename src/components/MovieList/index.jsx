@@ -1,22 +1,39 @@
+import { useState, useEffect } from "react";
+import { useWatchlist } from "../../utils/storage";
 import MovieCard from "../MovieCard";
 import "./MovieList.css";
 
-function MovieList({
-  movies,
-  isLoading,
-  apiError,
-  filters,
-  isWatchlisted,
-  toggleWatchlist,
-}) {
-  if (isLoading) return <div className="fetching-data">Fetching movies...</div>;
+function MovieList({ view, filters }) {
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [apiError, setApiError] = useState(null);
+  const [watchlist, isWatchlisted, toggleWatchlist] = useWatchlist();
 
+  useEffect(() => {
+    fetch("movies.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`API call error, status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((arr) => setMovies(arr))
+      .catch((error) => {
+        console.error(`Error fetching movies: ${error}`);
+        setApiError("Failed to load movies. Try again later.");
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) return <div className="fetching-data">Fetching movies...</div>;
   if (apiError) return <div className="error-message">{apiError}</div>;
 
-  if (movies.length === 0 || !movies)
+  const listToRender = view === "home" ? movies : watchlist;
+
+  if (listToRender.length === 0 || !listToRender)
     return <div className="movie-list-empty">No movies to list.</div>;
 
-  const filteredMovieList = filterByQuery(movies, filters);
+  const filteredMovieList = filterByQuery(listToRender, filters);
 
   const movieList = filteredMovieList.map((movie) => {
     const isInWatchlist = isWatchlisted(movie.id);
