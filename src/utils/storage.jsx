@@ -23,7 +23,7 @@ export function useWatchlist() {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
   }, [watchlist]);
 
-  const toggleWatchlist = (movie) => {
+  const toggleWatchlist = useCallback((movie) => {
     setWatchlist((watchlist) => {
       const exists = watchlist.find((elem) => elem.id === movie.id);
 
@@ -33,11 +33,14 @@ export function useWatchlist() {
         return [...watchlist, movie];
       }
     });
-  };
+  }, []);
 
-  const isWatchlisted = (movieId) => {
-    return watchlist.find((elem) => elem.id === movieId);
-  };
+  const isWatchlisted = useCallback(
+    (movieId) => {
+      return watchlist.find((elem) => elem.id === movieId);
+    },
+    [watchlist],
+  );
 
   return [watchlist, isWatchlisted, toggleWatchlist];
 }
