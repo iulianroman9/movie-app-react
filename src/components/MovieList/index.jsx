@@ -3,14 +3,17 @@ import { useWatchlist } from "../../utils/storage";
 import MovieCard from "../MovieCard";
 import "./MovieList.css";
 
-function MovieList({ view, filters }) {
+function MovieList({
+  view = "home",
+  filters = { query: "", title: "no-sort", rating: "no-sort", genre: "all" },
+}) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
   const [watchlist, isWatchlisted, toggleWatchlist] = useWatchlist();
 
   useEffect(() => {
-    fetch("movies.json")
+    fetch("http://localhost:5173/movies.json")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`API call error, status: ${response.status}`);
