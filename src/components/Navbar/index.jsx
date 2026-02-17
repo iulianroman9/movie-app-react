@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <nav>
       <NavLink
-        to="/movies"
+        to="/"
         className={({ isActive }) =>
           isActive ? "nav-link active" : "nav-link"
         }
