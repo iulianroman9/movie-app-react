@@ -13,21 +13,16 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: "movies",
-        children: [
-          {
-            index: true,
-            Component: MoviesIndex,
-          },
-          {
-            path: ":id",
-            Component: MovieCardStandalone,
-            loader: getMovie,
-            hydrateFallbackElement: (
-              <div className="fetching-data">Fetching movie...</div>
-            ),
-          },
-        ],
+        path: "",
+        Component: MoviesIndex,
+      },
+      {
+        path: "/movies/:id",
+        Component: MovieCardStandalone,
+        loader: getMovie,
+        hydrateFallbackElement: (
+          <div className="fetching-data">Fetching movie...</div>
+        ),
       },
       {
         path: "watchlist",
