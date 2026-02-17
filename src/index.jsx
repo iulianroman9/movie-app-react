@@ -28,6 +28,10 @@ const router = createBrowserRouter([
         path: "watchlist",
         element: <MoviesIndex view="watchlist" />,
       },
+      {
+        path: "*",
+        element: <div className="error-message">Page not found.</div>,
+      },
     ],
   },
 ]);
