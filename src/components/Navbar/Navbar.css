@@ -12,7 +12,7 @@ nav {
   z-index: 999;
 }
 
-.nav-btn {
+.nav-link {
   flex: 0.075;
   background: transparent;
   border: 1px solid transparent;
@@ -22,15 +22,16 @@ nav {
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.2s ease;
+  text-align: center;
+  text-decoration: none;
 }
 
-.nav-btn:hover {
+.nav-link:hover {
   background-color: #333;
   color: white;
 }
 
-.nav-btn.active {
+.nav-link.active {
   background-color: #ebc429;
   color: #1a1a1a;
-  font-weight: bold;
 }

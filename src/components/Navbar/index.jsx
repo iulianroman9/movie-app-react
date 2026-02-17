@@ -1,21 +1,26 @@
 import "./Navbar.css";
+import { NavLink } from "react-router";
 
-function Navbar({ view, setView }) {
+function Navbar() {
   return (
     <nav>
-      <button
-        className={view === "home" ? "nav-btn active" : "nav-btn"}
-        onClick={() => setView("home")}
+      <NavLink
+        to="/movies"
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
       >
         Home
-      </button>
+      </NavLink>
 
-      <button
-        className={view === "watchlist" ? "nav-btn active" : "nav-btn"}
-        onClick={() => setView("watchlist")}
+      <NavLink
+        to="/watchlist"
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
       >
         Watchlist
-      </button>
+      </NavLink>
     </nav>
   );
 }
