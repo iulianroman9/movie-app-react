@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useWatchlist } from "../../utils/storage";
 import MovieCard from "../MovieCard";
 import "./MovieList.css";
+import { Link } from "react-router";
 
 function MovieList({ view, filters }) {
   const [movies, setMovies] = useState([]);

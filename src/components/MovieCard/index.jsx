@@ -1,4 +1,5 @@
 import "./MovieCard.css";
+import { Link } from "react-router";
 
 function MovieCard({ movie, isWatchlisted, toggleWatchlist }) {
   const classList = isWatchlisted
@@ -8,16 +9,22 @@ function MovieCard({ movie, isWatchlisted, toggleWatchlist }) {
 
   return (
     <div className="movie-card">
-      <div className="movie-image">
-        <img src={`/images/${movie.id}.jpg`} alt="movie-poster" />
-      </div>
-      <div className="movie-info">
-        <h2 className="movie-title">{movie.title}</h2>
-        <div className="movie-meta-info">
-          <p>{`Genre: ${movie.genre}`}</p>
-          <p>{`Rating: ${movie.rating}/10`}</p>
+      <Link
+        to={`/movies/${movie.id}`}
+        key={movie.id}
+        className="movie-card-link"
+      >
+        <div className="movie-image">
+          <img src={`/images/${movie.id}.jpg`} alt="movie-poster" />
         </div>
-      </div>
+        <div className="movie-info">
+          <h2 className="movie-title">{movie.title}</h2>
+          <div className="movie-meta-info">
+            <p>{`Genre: ${movie.genre}`}</p>
+            <p>{`Rating: ${movie.rating}/10`}</p>
+          </div>
+        </div>
+      </Link>
       <button className={classList} onClick={() => toggleWatchlist(movie)}>
         {buttonText}
       </button>
