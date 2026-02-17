@@ -1,10 +1,11 @@
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router";
-import App from "./App.jsx";
 import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import { StrictMode } from "react";
-import MovieCard from "./components/MovieCard/index.jsx";
-import MovieIndex from "./components/MovieIndex/index.jsx";
+import { getMovie } from "./utils/getMovie.jsx";
+import App from "./App.jsx";
+import ReactDOM from "react-dom/client";
+import MovieCardStandalone from "./components/MovieCardStandalone/index.jsx";
+import MoviesIndex from "./components/MoviesIndex/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,17 +17,21 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            Component: MovieIndex,
+            Component: MoviesIndex,
           },
           {
             path: ":id",
-            Component: MovieCard,
+            Component: MovieCardStandalone,
+            loader: getMovie,
+            hydrateFallbackElement: (
+              <div className="fetching-data">Fetching movie...</div>
+            ),
           },
         ],
       },
       {
         path: "watchlist",
-        element: <MovieIndex view="watchlist" />,
+        element: <MoviesIndex view="watchlist" />,
       },
     ],
   },

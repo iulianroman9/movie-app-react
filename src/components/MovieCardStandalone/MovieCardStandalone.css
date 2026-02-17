@@ -1,0 +1,8 @@
+.movie-card-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.movie-card-wrapper > * {
+    flex: 0.25;
+}
