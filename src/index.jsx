@@ -3,21 +3,30 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import App from "./App.jsx";
 import "./index.css";
 import { StrictMode } from "react";
-import MovieList from "./components/MovieList/index.jsx";
 import MovieCard from "./components/MovieCard/index.jsx";
+import MovieIndex from "./components/MovieIndex/index.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
-  },
-  {
-    path: "movies",
-    Component: MovieList,
     children: [
       {
-        path: ":id",
-        Component: MovieCard,
+        path: "movies",
+        children: [
+          {
+            index: true,
+            Component: MovieIndex,
+          },
+          {
+            path: ":id",
+            Component: MovieCard,
+          },
+        ],
+      },
+      {
+        path: "watchlist",
+        element: <MovieIndex view="watchlist" />,
       },
     ],
   },
