@@ -11,7 +11,7 @@ function MovieList({ view, filters }) {
   const [watchlist, isWatchlisted, toggleWatchlist] = useWatchlist();
 
   useEffect(() => {
-    fetch("http://localhost:5173/movies.json")
+    fetch("movies.json")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`API call error, status: ${response.status}`);
