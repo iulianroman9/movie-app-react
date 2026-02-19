@@ -1,30 +1,20 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useWatchlist } from "../../utils/storage";
 import MovieCard from "../MovieCard";
 import "./MovieList.css";
-import { Link } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchMovies } from "../../store/moviesSlice";
 
 function MovieList({ view, filters }) {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [apiError, setApiError] = useState(null);
+  const dispatch = useDispatch();
   const [watchlist, isWatchlisted, toggleWatchlist] = useWatchlist();
+  const { movies, isLoading, isApiError } = useSelector(
+    (state) => state.movies,
+  );
 
   useEffect(() => {
-    fetch("movies.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`API call error, status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((arr) => setMovies(arr))
-      .catch((error) => {
-        console.error(`Error fetching movies: ${error}`);
-        setApiError("Failed to load movies. Try again later.");
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+    if (movies.length === 0) dispatch(fetchMovies());
+  }, [movies.length]);
 
   const listToRender = view === "home" ? movies : watchlist;
 
@@ -34,7 +24,7 @@ function MovieList({ view, filters }) {
   }, [listToRender, filters]);
 
   if (isLoading) return <div className="fetching-data">Fetching movies...</div>;
-  if (apiError) return <div className="error-message">{apiError}</div>;
+  if (isApiError) return <div className="error-message">{isApiError}</div>;
 
   if (filteredMovieList.length === 0)
     return <div className="movie-list-empty">No movies to list.</div>;
