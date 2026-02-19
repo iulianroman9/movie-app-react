@@ -14,7 +14,7 @@ export function getWatchlist() {
       if (
         !parsedList.every(
           (el) =>
-            typeof el === object &&
+            typeof el === "object" &&
             "id" in el &&
             typeof el.id === "number" &&
             "title" in el &&
@@ -22,7 +22,7 @@ export function getWatchlist() {
             "genre" in el &&
             typeof el.genre === "string" &&
             "rating" in el &&
-            typeof el.rating === "number",
+            typeof el.rating === "string",
         )
       ) {
         throw new Error("watchlist items don't respect expected structure");

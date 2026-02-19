@@ -6,6 +6,8 @@ import App from "./App.jsx";
 import ReactDOM from "react-dom/client";
 import MovieCardStandalone from "./components/MovieCardStandalone/index.jsx";
 import MoviesIndex from "./components/MoviesIndex/index.jsx";
+import { Provider } from "react-redux";
+import { store } from "./store/store.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,8 @@ const router = createBrowserRouter([
 const entryPoint = document.getElementById("root");
 ReactDOM.createRoot(entryPoint).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </StrictMode>,
 );
